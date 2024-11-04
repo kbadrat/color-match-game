@@ -13,6 +13,67 @@
         <link rel="stylesheet" href="css/reset.css" />
         <link rel="stylesheet" href="css/style.css" />
     </head>
-    <body></body>
+    <body>
+        <main class="main" id="main-page">
+            <div class="container">
+                <div class="settings__header">
+                    <h1 class="title">Color Match</h1>
+                    <h2 class="subtitle">Challenge your color vision.</h2>
+                </div>
+                <div class="settings">
+                    <button class="settings__btn" id="player-mode">
+                        <div class="settings__btn-text">
+                            <p
+                                class="settings__btn-title"
+                                id="player-mode-title"
+                            >
+                                Singleplayer
+                            </p>
+                            <p
+                                class="settings__btn-description"
+                                id="player-mode-description"
+                            >
+                                Play on your own.
+                            </p>
+                        </div>
+                        <div class="settings__arrow">
+                            <img src="images/arrow.svg" alt="arrow" />
+                        </div>
+                    </button>
+                    <button class="settings__btn" id="game-mode-btn">
+                        <div class="settings__btn-text">
+                            <p class="settings__btn-title" id="game-mode-title">
+                                Survival
+                            </p>
+                            <p
+                                class="settings__btn-description"
+                                id="game-mode-description"
+                            >
+                                You can guess 4 times wrong.
+                            </p>
+                        </div>
+                        <div class="settings__arrow">
+                            <img src="images/arrow.svg" alt="arrow" />
+                        </div>
+                    </button>
+                    <button class="settings__btn" id="level-btn">
+                        <div class="settings__btn-text">
+                            <p class="settings__btn-title" id="level-btn-text">
+                                Meduim
+                            </p>
+                            <p class="settings__btn-description">Difficulty</p>
+                        </div>
+                        <div class="settings__arrow">
+                            <img src="images/arrow.svg" alt="arrow" />
+                        </div>
+                    </button>
+                </div>
+                <button class="main-btn" id="start-btn">Start game</button>
+                <p class="mode-not-available hidden" id="mode-not-available">
+                    This mode is not available yet.
+                </p>
+            </div>
+        </main>
+    </body>
     <script src="script.js"></script>
 </html>

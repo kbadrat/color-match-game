@@ -1,0 +1,159 @@
+html{
+    box-sizing: border-box;
+}
+
+*,
+*::after,
+*::before{
+    box-sizing: inherit;
+}
+
+button{
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+
+body{
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #0F172A;
+    position: relative;
+    background-color: #1e1e1e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+body .hidden{
+    display: none;
+}
+
+body .invisible{
+    visibility: hidden;
+}
+
+.main{
+    border-radius: 24px;
+    box-shadow: 0px 12px 36px 0px rgba(0, 0, 0, 0.15);
+    background-color: #fff;
+    width: 465px;
+    height: 465px;
+}
+
+.container{
+    padding: 32px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.settings__header{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.title{
+    font-weight: 800;
+    font-size: 32px;
+    line-height: 38.73px;
+}
+
+.subtitle{
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19.36px;
+}
+
+.settings{
+   display: flex;
+   flex-direction: column;
+   gap: 12px;
+}
+
+.settings__btn{
+    background-color: #f1f4f9;
+    padding: 16px 20px;
+    border-radius: 16px;
+    display: flex;
+    gap: 12px;
+}
+
+.settings__btn-text{
+    text-align: start;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.settings__btn-title{
+    font-family: "Inter", sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: #0F172A;
+    line-height: 21.78px;
+}
+
+.settings__btn-description{
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #0F172A;
+    line-height: 19.36px;
+}
+
+.settings__arrow{
+    margin: auto 0 auto auto;
+}
+
+.main-btn{
+    padding: 15px 24px;
+    background-color: #0F172A;
+    color: #fff;
+
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.15);
+
+    font-family: "Inter", sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 21.78px;
+
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+
+/* Multiplayer mode is not available */
+.not-available{
+    opacity: 40%;
+    pointer-events: none;
+    cursor: default;
+}
+
+.mode-not-available{    
+    padding: 15px 24px;
+    background-color: #ffdbdb;
+    color: rgb(145, 0, 0);
+
+    border-radius: 12px;
+
+    font-family: "Inter", sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 21.78px;
+
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+
