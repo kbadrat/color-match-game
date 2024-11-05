@@ -32,7 +32,7 @@ const settings = {
     ],
     currentGameMode: 0,
 
-    level: ["Easy", "Meduim", "Hard"],
+    level: ["Easy", "Medium", "Hard"],
     currentLevel: 1,
 };
 
@@ -106,21 +106,23 @@ const result = document.querySelector(".result");
 const nextBtn = document.getElementById("next-btn");
 nextBtn.addEventListener("click", loadNextRound);
 
-let duplicateColor;
-
-function getRandomColor() {
-    const r = Math.floor(Math.random() * 256);
-    const g = Math.floor(Math.random() * 256);
-    const b = Math.floor(Math.random() * 256);
-    return `rgb(${r}, ${g}, ${b})`;
-}
+let duplicateColor = "";
 
 function generateColors() {
     let colors = [];
 
-    while (colors.length < 15) {
-        const newColor = getRandomColor();
-        if (!colors.includes(newColor)) colors.push(newColor);
+    switch (settings.level[game.level]) {
+        case "Easy":
+            colors = generateEasyColors(15);
+            break;
+        case "Medium":
+            colors = generateMediumColors(15);
+            break;
+        case "Hard":
+            colors = generateHardColors(15);
+            break;
+        default:
+            break;
     }
 
     // Get random main color.
@@ -131,6 +133,91 @@ function generateColors() {
     colors.sort(() => Math.random() - 0.5);
 
     return [colors, duplicateColor];
+}
+
+function getRandomColorRGB() {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return { r, g, b };
+}
+
+function generateEasyColors(count) {
+    const brightColors = [];
+    const colorOptions = [
+        "red",
+        "green",
+        "blue",
+        "yellow",
+        "orange",
+        "pink",
+        "cyan",
+        "magenta",
+        "purple",
+        "lime",
+        "violet",
+        "teal",
+        "turquoise",
+        "gold",
+        "crimson",
+    ];
+
+    while (brightColors.length < count) {
+        const randomColor =
+            colorOptions[Math.floor(Math.random() * colorOptions.length)];
+        if (!brightColors.includes(randomColor)) {
+            brightColors.push(randomColor);
+        }
+    }
+
+    return brightColors;
+}
+
+function generateMediumColors(count) {
+    const mediumColors = [];
+
+    while (mediumColors.length < count) {
+        let newColor = getRandomColorRGB();
+        newColor = `rgb(${newColor.r}, ${newColor.g}, ${newColor.b})`;
+        if (!mediumColors.includes(newColor)) {
+            mediumColors.push(newColor);
+        }
+    }
+    return mediumColors;
+}
+
+function generateHardColors(count) {
+    const baseColor = getRandomColorRGB();
+    const shades = new Set();
+
+    while (shades.size < count) {
+        const shade = adjustColorBrightness(
+            baseColor,
+            Math.floor(Math.random() * 140) - 70
+        );
+        shades.add(shade);
+    }
+
+    return Array.from(shades);
+}
+
+function adjustColorBrightness(color, percent) {
+    const maxRGBValue = 230;
+
+    const r = Math.min(
+        maxRGBValue,
+        Math.max(0, color.r + (color.r * percent) / 100)
+    );
+    const g = Math.min(
+        maxRGBValue,
+        Math.max(0, color.g + (color.g * percent) / 100)
+    );
+    const b = Math.min(
+        maxRGBValue,
+        Math.max(0, color.b + (color.b * percent) / 100)
+    );
+
+    return `rgb(${Math.floor(r)}, ${Math.floor(g)}, ${Math.floor(b)})`;
 }
 
 function renderSquares(colors, duplicateColor) {
