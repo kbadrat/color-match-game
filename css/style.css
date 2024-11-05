@@ -37,6 +37,11 @@ body .invisible{
     visibility: hidden;
 }
 
+.main-container{
+    height: 684px;
+    width: 465px;
+}
+
 .main{
     border-radius: 24px;
     box-shadow: 0px 12px 36px 0px rgba(0, 0, 0, 0.15);
@@ -204,4 +209,24 @@ body .invisible{
 .result{
     text-align: center;
     font-size: 36px;
+}
+
+/* Result page */
+
+.end{
+    border-radius: 24px;
+    box-shadow: 0px 12px 36px 0px rgba(0, 0, 0, 0.15);
+    background-color: #fff;
+    width: 465px;
+    height: 180px;
+}
+
+.end__btns{
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.main-btn{
+    margin: 0;
 }

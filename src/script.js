@@ -2,7 +2,7 @@
 const mainPage = document.getElementById("main-page");
 const gamePage = document.getElementById("game-page");
 
-/* Main page. */
+/*          Main page.          */
 const playerModeBtn = document.getElementById("player-mode");
 const playerModeTitle = document.getElementById("player-mode-title");
 const playerModeDescription = document.getElementById(
@@ -37,11 +37,25 @@ const settings = {
 };
 
 // Actula game settings.
-const game = {
-    playerMode: settings.currentPlayerMode,
-    gameMode: settings.currentGameMode,
-    level: settings.currentLevel,
-};
+class Game {
+    constructor() {
+        this.playerMode = settings.currentPlayerMode;
+        this.gameMode = settings.currentGameMode;
+        this.level = settings.currentLevel;
+        this.score = 0;
+        this.round = 1;
+    }
+
+    resetSettings() {
+        this.playerMode = settings.currentPlayerMode;
+        this.gameMode = settings.currentGameMode;
+        this.level = settings.currentLevel;
+        this.score = 0;
+        this.round = 1;
+    }
+}
+
+const game = new Game();
 
 // Change modes.
 playerModeBtn.addEventListener("click", nextPlayerMode);
@@ -50,8 +64,10 @@ levelBtn.addEventListener("click", nextLevel);
 
 // Game launch.
 startBtn.addEventListener("click", () => {
+    game.resetSettings();
     startGame();
-    switchPages();
+    mainPage.classList.toggle("hidden");
+    gamePage.classList.toggle("hidden");
 });
 
 function nextPlayerMode() {
@@ -61,7 +77,7 @@ function nextPlayerMode() {
     playerModeDescription.innerText =
         settings.playerModeDescription[settings.currentPlayerMode];
 
-    /* Multiplayer mode is not available */
+    // ! Multiplayer mode is not available
     gameModeBtn.classList.toggle("not-available");
     levelBtn.classList.toggle("not-available");
     startBtn.classList.toggle("hidden");
@@ -81,7 +97,7 @@ function nextLevel() {
     levelTitle.innerText = settings.level[settings.currentLevel];
 }
 
-/* Game page */
+/*          Game page            */
 
 const playfield = document.querySelector(".playfield");
 const score = document.getElementById("game-score");
@@ -90,10 +106,7 @@ const result = document.querySelector(".result");
 const nextBtn = document.getElementById("next-btn");
 nextBtn.addEventListener("click", loadNextRound);
 
-const statistics = {
-    score: 0,
-    round: 1,
-};
+let duplicateColor;
 
 function getRandomColor() {
     const r = Math.floor(Math.random() * 256);
@@ -101,8 +114,6 @@ function getRandomColor() {
     const b = Math.floor(Math.random() * 256);
     return `rgb(${r}, ${g}, ${b})`;
 }
-
-let duplicateColor;
 
 function generateColors() {
     let colors = [];
@@ -160,32 +171,44 @@ function handleStatistics(isCorrectAnswer) {
     result.classList.toggle("hidden");
 
     if (isCorrectAnswer) {
-        statistics.score++;
-        score.innerText = `Score: ${statistics.score} / 10`;
+        game.score++;
+        score.innerText = `Score: ${game.score} / 10`;
         result.innerText = "✅";
     } else result.innerText = "❌";
 
-    statistics.round++;
-    round.innerText = `Round: ${statistics.round}`;
+    game.round++;
+    round.innerText = `Round: ${game.round}`;
     nextBtn.classList.toggle("hidden");
 }
 
 function loadNextRound() {
     result.classList.toggle("hidden");
     nextBtn.classList.toggle("hidden");
-    score.innerText = `Score: ${statistics.score} / 10`;
+    score.innerText = `Score: ${game.score} / 10`;
 
     gamePage.style.height = "552px";
 
     startGame();
 }
 
-function switchPages() {
-    mainPage.classList.toggle("hidden");
-    gamePage.classList.toggle("hidden");
-}
-
 function startGame() {
+    console.log(`Player mode : ${settings.playerMode[game.playerMode]}`);
+    console.log(`Game mode : ${settings.gameMode[game.gameMode]}`);
+    console.log(`Level : ${settings.level[game.level]}`);
+
     const [colors, duplicateColor] = generateColors();
     renderSquares(colors, duplicateColor);
+}
+
+/* Result page */
+
+const end = document.querySelector(".end");
+const restartBtn = document.getElementById("restart-btn");
+restartBtn.addEventListener("click", restartGame);
+
+function restartGame() {
+    game.resetSettings();
+    startGame();
+    end.classList.toggle("hidden");
+    gamePage.classList.toggle("hidden");
 }
