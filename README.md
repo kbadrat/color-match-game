@@ -11,7 +11,7 @@ Welcome to the **Color Match Game**! This is a fun and engaging game where playe
 
 ## Current Status
 
-This game is currently in development. 
+A multiplayer mode is currently in development.  
 
 ## Technologies Used
 

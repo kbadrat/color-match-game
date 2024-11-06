@@ -26,7 +26,7 @@ const settings = {
 
     gameMode: ["Survival", "20 rounds", "10 to win"],
     gameModeDescription: [
-        "You can guess 4 times wrong.",
+        "You can guess 3 times wrong.",
         "Get the highest score.",
         "Guess 10 correctly to win.",
     ],
@@ -42,7 +42,7 @@ class Game {
         this.playerMode = settings.currentPlayerMode;
         this.gameMode = settings.currentGameMode;
         this.level = settings.currentLevel;
-        this.score = 0;
+        this.points = 0;
         this.round = 1;
     }
 
@@ -50,8 +50,49 @@ class Game {
         this.playerMode = settings.currentPlayerMode;
         this.gameMode = settings.currentGameMode;
         this.level = settings.currentLevel;
-        this.score = 0;
+        this.points = 0;
         this.round = 1;
+    }
+
+    getLevelName() {
+        return settings.level[this.level];
+    }
+
+    addPoint() {
+        this.points++;
+    }
+
+    nextRound() {
+        this.round++;
+    }
+
+    getPoints() {
+        return this.points;
+    }
+
+    getRounds() {
+        return this.round;
+    }
+
+    getGameMode() {
+        return settings.gameMode[this.gameMode];
+    }
+
+    isGameOver() {
+        console.log(this.getGameMode());
+        switch (this.getGameMode()) {
+            case "Survival":
+                if (this.getRounds() - this.getPoints() === 3) return true;
+                break;
+            case "20 rounds":
+                if (this.getRounds() === 20) return true;
+                break;
+            case "10 to win":
+                if (this.getPoints() === 10) return true;
+                break;
+            default:
+                throw new Error("Unexpected value in switch statement.");
+        }
     }
 }
 
@@ -67,7 +108,6 @@ startBtn.addEventListener("click", () => {
     game.resetSettings();
     startGame();
     mainPage.classList.toggle("hidden");
-    gamePage.classList.toggle("hidden");
 });
 
 function nextPlayerMode() {
@@ -111,7 +151,7 @@ let duplicateColor = "";
 function generateColors() {
     let colors = [];
 
-    switch (settings.level[game.level]) {
+    switch (game.getLevelName()) {
         case "Easy":
             colors = generateEasyColors(15);
             break;
@@ -122,7 +162,7 @@ function generateColors() {
             colors = generateHardColors(15);
             break;
         default:
-            break;
+            throw new Error("Unexpected value in switch statement.");
     }
 
     // Get random main color.
@@ -258,24 +298,35 @@ function handleStatistics(isCorrectAnswer) {
     result.classList.toggle("hidden");
 
     if (isCorrectAnswer) {
-        game.score++;
-        score.innerText = `Score: ${game.score} / 10`;
+        game.addPoint();
+        score.innerText = `Score: ${game.getPoints()} / 10`;
         result.innerText = "✅";
     } else result.innerText = "❌";
 
-    game.round++;
-    round.innerText = `Round: ${game.round}`;
+    if (game.isGameOver()) nextBtn.innerText = "Finish 😌";
+
     nextBtn.classList.toggle("hidden");
 }
 
 function loadNextRound() {
+    if (game.isGameOver()) {
+        showResults();
+        return;
+    }
+
     result.classList.toggle("hidden");
     nextBtn.classList.toggle("hidden");
-    score.innerText = `Score: ${game.score} / 10`;
+
+    game.nextRound();
 
     gamePage.style.height = "552px";
 
     startGame();
+}
+
+function updateCurrentStats() {
+    score.innerText = `Score: ${game.getPoints()} / 10`;
+    round.innerText = `Round: ${game.getRounds()}`;
 }
 
 function startGame() {
@@ -283,19 +334,45 @@ function startGame() {
     console.log(`Game mode : ${settings.gameMode[game.gameMode]}`);
     console.log(`Level : ${settings.level[game.level]}`);
 
+    updateCurrentStats();
+
     const [colors, duplicateColor] = generateColors();
     renderSquares(colors, duplicateColor);
+
+    if (gamePage.classList.contains("hidden"))
+        gamePage.classList.remove("hidden");
 }
 
 /* Result page */
 
 const end = document.querySelector(".end");
 const restartBtn = document.getElementById("restart-btn");
+const resultScore = document.querySelector("#result-score");
+const changeModeBtn = document.querySelector("#change-mode-btn");
 restartBtn.addEventListener("click", restartGame);
+changeModeBtn.addEventListener("click", changeMode);
+
+function showResults() {
+    resultScore.innerText = `You scored ${game.getPoints()} in ${game.getRounds()} rounds.`;
+    gamePage.classList.toggle("hidden");
+    end.classList.toggle("hidden");
+}
+
+function prepareGamePage() {
+    nextBtn.innerText = "Next round";
+    result.classList.toggle("hidden");
+    nextBtn.classList.toggle("hidden");
+    gamePage.style.height = "552px";
+    end.classList.toggle("hidden");
+}
 
 function restartGame() {
+    prepareGamePage();
     game.resetSettings();
     startGame();
-    end.classList.toggle("hidden");
-    gamePage.classList.toggle("hidden");
+}
+
+function changeMode() {
+    mainPage.classList.toggle("hidden");
+    prepareGamePage();
 }
