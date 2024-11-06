@@ -44,6 +44,7 @@ class Game {
         this.level = settings.currentLevel;
         this.points = 0;
         this.round = 1;
+        this.health = 3;
     }
 
     resetSettings() {
@@ -52,6 +53,7 @@ class Game {
         this.level = settings.currentLevel;
         this.points = 0;
         this.round = 1;
+        this.health = 3;
     }
 
     getLevelName() {
@@ -78,11 +80,18 @@ class Game {
         return settings.gameMode[this.gameMode];
     }
 
+    getHealth() {
+        return this.health;
+    }
+
+    subHealth() {
+        this.health--;
+    }
+
     isGameOver() {
-        console.log(this.getGameMode());
         switch (this.getGameMode()) {
             case "Survival":
-                if (this.getRounds() - this.getPoints() === 3) return true;
+                if (this.getHealth() === 0) return true;
                 break;
             case "20 rounds":
                 if (this.getRounds() === 20) return true;
@@ -189,17 +198,17 @@ function generateEasyColors(count) {
         "green",
         "blue",
         "yellow",
+        "purple",
+        "cyan",
         "orange",
         "pink",
-        "cyan",
-        "magenta",
-        "purple",
-        "lime",
-        "violet",
+        "brown",
+        "coral",
         "teal",
-        "turquoise",
+        "gray",
+        "lime",
+        "magenta",
         "gold",
-        "crimson",
     ];
 
     while (brightColors.length < count) {
@@ -285,6 +294,7 @@ function showAnswer(selectedColor, duplicateColor) {
         } else if (selectedColor === clickedColor) {
             square.style.pointerEvents = "none";
             isCorrectAnswer = false;
+            game.subHealth();
         } else {
             square.classList.add("invisible");
         }
@@ -299,9 +309,11 @@ function handleStatistics(isCorrectAnswer) {
 
     if (isCorrectAnswer) {
         game.addPoint();
-        score.innerText = `Score: ${game.getPoints()} / 10`;
+
         result.innerText = "✅";
     } else result.innerText = "❌";
+
+    updateCurrentStats();
 
     if (game.isGameOver()) nextBtn.innerText = "Finish 😌";
 
@@ -325,15 +337,33 @@ function loadNextRound() {
 }
 
 function updateCurrentStats() {
-    score.innerText = `Score: ${game.getPoints()} / 10`;
-    round.innerText = `Round: ${game.getRounds()}`;
+    switch (game.getGameMode()) {
+        case "Survival":
+            score.innerText = `Score: ${game.getPoints()}`;
+
+            let health = "";
+
+            for (let i = 0; i < game.getHealth(); i++) {
+                health = `${health}❤️`;
+            }
+            round.innerText = `Health: ${health}`;
+
+            break;
+        case "20 rounds":
+            score.innerText = `Score: ${game.getPoints()}`;
+            round.innerText = `Round: ${game.getRounds()} / 20`;
+            break;
+        case "10 to win":
+            score.innerText = `Score: ${game.getPoints()} / 10`;
+            round.innerText = `Round: ${game.getRounds()}`;
+
+            break;
+        default:
+            throw new Error("Unexpected value in switch statement.");
+    }
 }
 
 function startGame() {
-    console.log(`Player mode : ${settings.playerMode[game.playerMode]}`);
-    console.log(`Game mode : ${settings.gameMode[game.gameMode]}`);
-    console.log(`Level : ${settings.level[game.level]}`);
-
     updateCurrentStats();
 
     const [colors, duplicateColor] = generateColors();
@@ -353,7 +383,22 @@ restartBtn.addEventListener("click", restartGame);
 changeModeBtn.addEventListener("click", changeMode);
 
 function showResults() {
-    resultScore.innerText = `You scored ${game.getPoints()} in ${game.getRounds()} rounds.`;
+    switch (game.getGameMode()) {
+        case "Survival":
+            resultScore.innerText = `Your survival score: ${game.getPoints()}`;
+            break;
+        case "20 rounds":
+            resultScore.innerText = `Your score: ${game.getPoints()}`;
+
+            break;
+        case "10 to win":
+            resultScore.innerText = `You scored ${game.getPoints()} in ${game.getRounds()} rounds.`;
+
+            break;
+        default:
+            throw new Error("Unexpected value in switch statement.");
+    }
+
     gamePage.classList.toggle("hidden");
     end.classList.toggle("hidden");
 }
