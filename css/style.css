@@ -90,6 +90,17 @@ body .invisible{
     border-radius: 16px;
     display: flex;
     gap: 12px;
+    transition:  transform 0.2s ease, box-shadow 0.3s ease, 
+}
+
+.settings__btn:hover {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); 
+    transform: translateY(-3px); 
+}
+
+.settings__btn:active {
+    transform: scale(0.95) translateY(0); 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
 }
 
 .settings__btn-text{
@@ -135,6 +146,14 @@ body .invisible{
     display: flex;
     justify-content: center;
     margin: auto;
+
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.main-btn:hover {
+    transform: scale(1.05); 
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); 
+    background-color: #360cc0;
 }
 
 /* Multiplayer mode is not available */
@@ -204,6 +223,19 @@ body .invisible{
     border-radius: 16px;
     width: 100px;
     height: 100px;
+
+    transition: transform 0.3s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+}
+
+.square:hover {
+    transform: scale(1.1); 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); 
+}
+
+.square:active {
+    transform: scale(0.95); 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); 
+    opacity: 0.8; 
 }
 
 .result{
